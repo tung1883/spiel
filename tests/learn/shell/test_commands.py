@@ -1,7 +1,7 @@
 import collections
 
-from tui_games.learn.shell.executor import run_line
-from tui_games.learn.shell.fs import FS
+from src.learn.shell.executor import run_line
+from src.learn.shell.fs import FS
 
 
 def test_sort_and_uniq_c_match_python_reference():

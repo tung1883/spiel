@@ -1,9 +1,9 @@
 import pytest
 from textual.widgets import DataTable, TextArea
 
-from tui_games import config
-from tui_games.app import GamesApp
-from tui_games.learn.sql.levels import DRILLS
+from src import config
+from src.app import GamesApp
+from src.learn.sql.levels import DRILLS
 
 
 @pytest.mark.asyncio

@@ -1,7 +1,7 @@
 import pytest
 
-from tui_games.learn.git.commands import GitEngine
-from tui_games.learn.git.levels import LEVELS, LevelRun, solve
+from src.learn.git.commands import GitEngine
+from src.learn.git.levels import LEVELS, LevelRun, solve
 
 
 def test_fresh_repo_has_one_root_commit_on_main():

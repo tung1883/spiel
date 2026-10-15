@@ -1,5 +1,5 @@
-from tui_games.learn.bughunt.levels import LEVELS
-from tui_games.learn.bughunt.screens import diagnose_options
+from src.learn.bughunt.levels import LEVELS
+from src.learn.bughunt.screens import diagnose_options
 
 
 def test_diagnose_options_always_include_the_correct_class():

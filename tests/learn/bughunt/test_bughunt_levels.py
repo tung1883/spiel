@@ -1,7 +1,7 @@
 import pytest
 
-from tui_games.learn.bughunt import sandbox
-from tui_games.learn.bughunt.levels import LEVELS, apply_fix, build_script
+from src.learn.bughunt import sandbox
+from src.learn.bughunt.levels import LEVELS, apply_fix, build_script
 
 
 @pytest.mark.parametrize("level", LEVELS, ids=[lv.id for lv in LEVELS])

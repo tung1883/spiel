@@ -1,4 +1,4 @@
-from tui_games.learn.regex.engine import check
+from src.learn.regex.engine import check
 
 
 def test_basic_pass_and_fail():

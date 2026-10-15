@@ -1,4 +1,4 @@
-from tui_games.learn.git import trivia
+from src.learn.git import trivia
 
 
 def test_bank_entries_are_well_formed():

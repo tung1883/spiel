@@ -1,6 +1,6 @@
 import pytest
 
-from tui_games.learn.shell.levels import MISSIONS, MissionRun
+from src.learn.shell.levels import MISSIONS, MissionRun
 
 
 @pytest.mark.parametrize("i", range(len(MISSIONS)))

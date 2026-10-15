@@ -1,7 +1,7 @@
 import time
 
-from tui_games.learn.bughunt.levels import LEVELS, apply_fix
-from tui_games.learn.bughunt.tracer import MAX_STEPS, REPR_CAP, trace_snippet
+from src.learn.bughunt.levels import LEVELS, apply_fix
+from src.learn.bughunt.tracer import MAX_STEPS, REPR_CAP, trace_snippet
 
 
 def test_traces_buggy_and_fixed_code_with_differing_step_counts():

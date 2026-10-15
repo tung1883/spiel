@@ -1,6 +1,6 @@
 import time
 
-from tui_games.learn.bughunt import sandbox
+from src.learn.bughunt import sandbox
 
 
 def test_runs_ok_snippet():

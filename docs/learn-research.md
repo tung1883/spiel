@@ -22,7 +22,7 @@ engineering - the architecture in PLAN.md section 1 held up across all 7 games.
 - Deferred (not needed for Phase 0/1): `Ctrl-Enter`/`F5` key reporting (SQL game, phase 5),
   `TextArea` vs custom input (shell/SQL, phases 3/5), large tile-map repaint cost at 60x25 (git/shell
   graph phases). Re-check when those phases start.
-- Package data: added `tool.setuptools.package-data` for `tui_games.learn` -> `content/**/*` (done
+- Package data: added `tool.setuptools.package-data` for `src.learn` -> `content/**/*` (done
   below, phase 0).
 
 ## 12.3 Cross-cutting decisions (settled now, used by Phase 0 code)

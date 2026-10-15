@@ -1,7 +1,7 @@
 import pytest
 
-from tui_games.learn.sql import db
-from tui_games.learn.sql.levels import CASES, DRILLS
+from src.learn.sql import db
+from src.learn.sql.levels import CASES, DRILLS
 
 
 @pytest.fixture

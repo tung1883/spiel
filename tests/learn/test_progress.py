@@ -1,5 +1,5 @@
-from tui_games import config
-from tui_games.learn import progress
+from src import config
+from src.learn import progress
 
 
 def _use_tmp_config(monkeypatch, tmp_path):

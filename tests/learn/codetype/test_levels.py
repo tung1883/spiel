@@ -1,6 +1,6 @@
 from collections import Counter
 
-from tui_games.learn.codetype.levels import ALL_SNIPPETS, BOSS_SNIPPETS, SNIPPETS, distractor_notes, validate_all
+from src.learn.codetype.levels import ALL_SNIPPETS, BOSS_SNIPPETS, SNIPPETS, distractor_notes, validate_all
 
 
 def test_all_snippets_valid():

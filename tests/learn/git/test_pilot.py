@@ -1,9 +1,9 @@
 import pytest
 
-from tui_games import config
-from tui_games.app import GamesApp
-from tui_games.learn.git.levels import LEVELS
-from tui_games.learn.git.screens import GitLevelScreen
+from src import config
+from src.app import GamesApp
+from src.learn.git.levels import LEVELS
+from src.learn.git.screens import GitLevelScreen
 
 
 @pytest.mark.asyncio

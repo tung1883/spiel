@@ -2,9 +2,9 @@ import random
 
 import pytest
 
-from tui_games import config
-from tui_games.sudoku import bank, progress
-from tui_games.sudoku.engine import SudokuGame, idx
+from src import config
+from src.sudoku import bank, progress
+from src.sudoku.engine import SudokuGame, idx
 
 
 def _rows_cols_boxes_ok(values: list[int]) -> bool:

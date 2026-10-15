@@ -1,6 +1,6 @@
 """Puzzle bank: 4 variants x 5 difficulties x 100 real curated puzzles each (ported from the
 user's butler-web sudoku game, ..\\butler\\butler-web\\src\\games\\sudoku\\ - same puzzle data,
-same encoding). Loaded once from tui_games/sudoku/puzzles/*.json (packaged data, see pyproject.toml).
+same encoding). Loaded once from src/sudoku/puzzles/*.json (packaged data, see pyproject.toml).
 """
 import json
 from functools import lru_cache
@@ -16,7 +16,7 @@ DIFFICULTIES = ["easy", "medium", "hard", "expert", "extreme"]
 
 @lru_cache(maxsize=None)
 def _bank(variant: str) -> dict:
-    text = resources.files("tui_games.sudoku.puzzles").joinpath(f"{variant}.json").read_text()
+    text = resources.files("src.sudoku.puzzles").joinpath(f"{variant}.json").read_text()
     return json.loads(text)
 
 

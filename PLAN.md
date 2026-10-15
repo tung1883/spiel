@@ -10,17 +10,17 @@
 `pip install -e .`, entry point `tui-games`). Related repos nearby: `..\plainphone`, `..\butler` (not needed here).
 
 **Already built (do not redo):**
-- Main menu `tui_games/app.py`: rows TypeRacer, Chess, Minesweeper, **Vim Quest (learn vim)**, Settings. `s` / `ctrl+s` open
+- Main menu `src/app.py`: rows TypeRacer, Chess, Minesweeper, **Vim Quest (learn vim)**, Settings. `s` / `ctrl+s` open
   Settings.
-- TypeRacer (`tui_games/typeracer/`): races, offline mode, languages, instant death, analytics (`analytics.py`: `RaceStats`,
+- TypeRacer (`src/typeracer/`): races, offline mode, languages, instant death, analytics (`analytics.py`: `RaceStats`,
   ghosts in `typeracer-ghosts.json`, history), settings in `typeracer/menu.py` (`SettingsScreen`, accent colour via
   `self.app.theme_variables["primary"]`).
-- Chess (`tui_games/chess/`): Lichess, offline engine, Chess.com browserless client; text board + side panels.
-- **Vim Quest v1** (`tui_games/games/vimquest.py`, tests in `tests/test_vimquest.py`): `VimBuffer` engine (normal/insert, counts,
+- Chess (`src/chess/`): Lichess, offline engine, Chess.com browserless client; text board + side panels.
+- **Vim Quest v1** (`src/games/vimquest.py`, tests in `tests/test_vimquest.py`): `VimBuffer` engine (normal/insert, counts,
   motions h j k l w b e 0 ^ $ gg G f F t T ; ,, operators d/c, x D C r, i a A I o O, p P, u), 16 text-buffer levels
   with reference solutions, menu + level screens. It is the seed for Game 1 (section 2); its engine moves to
-  `tui_games/learn/vim/engine.py` and the 16 levels become "Training Rooms".
-- Persistence: `tui_games/config.py` (`load()/save()` of `%APPDATA%\tui-games\config.json`; keys in use: `typeracer`,
+  `src/learn/vim/engine.py` and the 16 levels become "Training Rooms".
+- Persistence: `src/config.py` (`load()/save()` of `%APPDATA%\tui-games\config.json`; keys in use: `typeracer`,
   `lichess_token`, `best_minesweeper_expert`, `vimquest.best`). The new `learn` key must not disturb those.
 
 **Conventions to follow (from the user's CLAUDE.md and what bit us):**
@@ -41,7 +41,7 @@
 
 ## Context
 tui-games (Python 3.12 + Textual 8, `C:\Users\Tung\Documents\work\tui-games`) has TypeRacer, chess, Minesweeper and a first
-"Vim Quest" (16 text-buffer puzzles, `tui_games/games/vimquest.py`). The user wants a full suite of games that teach coding,
+"Vim Quest" (16 text-buffer puzzles, `src/games/vimquest.py`). The user wants a full suite of games that teach coding,
 each as deep and polished as https://vim-adventures.com/ (a world you explore, abilities you earn, boss rooms, a feel of
 progress), not a pile of quiz levels. Decisions already made with the user:
 
@@ -59,10 +59,10 @@ Bug Hunt, Code Typing.
 
 ## 1. Architecture
 
-New package `tui_games/learn/` (replaces `games/vimquest.py`, whose `VimBuffer` is moved and extended):
+New package `src/learn/` (replaces `games/vimquest.py`, whose `VimBuffer` is moved and extended):
 
 ```
-tui_games/learn/
+src/learn/
   hub.py            overworld map screen, entry from the main menu
   progress.py       persistence + XP/ranks/badges/unlocks (config.json key "learn")
   story.py          regions, prerequisites, NPC dialogue text, rank titles
@@ -82,11 +82,11 @@ Shared pieces (build once, Phase 0):
 
 | Piece | What it does | Reuse |
 |---|---|---|
-| `progress.py` | `LearnProgress` (xp, badges, per-game `levels{id:{stars,best}}`, `inventory`, `unlocked`), `record(game, level, score, par)` -> stars (3 = at/under par, 2 = <=1.5x, 1 = done), XP, rank ladder (Novice, Apprentice, ... Archmage), daily-challenge streak | `tui_games/config.py` `load()/save()` (same pattern as `typeracer/menu.py` `load_settings`) |
+| `progress.py` | `LearnProgress` (xp, badges, per-game `levels{id:{stars,best}}`, `inventory`, `unlocked`), `record(game, level, score, par)` -> stars (3 = at/under par, 2 = <=1.5x, 1 = done), XP, rank ladder (Novice, Apprentice, ... Archmage), daily-challenge streak | `src/config.py` `load()/save()` (same pattern as `typeracer/menu.py` `load_settings`) |
 | `hub.py` | Overworld: ASCII map of regions with roads, `@` marker moved with hjkl/arrows, locked regions greyed, per-region progress bar, side panel (rank, XP bar, streak, next unlock), Enter opens the region's level map | accent colour via `self.app.theme_variables["primary"]` (as in `SettingsScreen`) |
 | `widgets.py` | `Dialogue` (NPC speech box, typewriter, Enter to continue, skippable), `KeyboardView` (lit-up key map), `LevelMap` (generic level-select grid with stars), `ResultScreen` (stars, par vs yours, XP, "next / retry / map"), `HintBar` (hints cost a star), `CheatSheet` overlay (`?`) | Textual `Screen`/`Static`/`OptionList` patterns from `typeracer/menu.py` |
 | `levelio.py` | JSON/TXT loaders with schema validation; content lives in package data (add to `pyproject.toml` `package-data`) | - |
-| Hub entry | Replace the main-menu "Vim Quest" row with **"Learn to Code"**; add a `learn` option to the Settings screen (hints on/off, animations on/off) | `tui_games/app.py` `Menu`, `typeracer/menu.py` `SettingsScreen` |
+| Hub entry | Replace the main-menu "Vim Quest" row with **"Learn to Code"**; add a `learn` option to the Settings screen (hints on/off, animations on/off) | `src/app.py` `Menu`, `typeracer/menu.py` `SettingsScreen` |
 
 Cross-cutting rules:
 - Every level has a **reference solution** and a **par**; a test per game replays every solution through the real engine
@@ -329,11 +329,11 @@ Rough content volume: ~45 + 48 + 40 + 40 + (3 cases, 45 drills) + 70 + 150 snipp
 phase ships first with its mechanics + about half the levels and fills in the rest after.
 
 ## 10. Critical files (existing)
-- `tui_games/app.py`: main menu row "Learn to Code" (replace the "Vim Quest" row).
-- `tui_games/config.py`: `load()/save()` reused by `progress.py`.
-- `tui_games/games/vimquest.py` + `tests/test_vimquest.py`: engine and level tests migrate into `learn/vim/`.
-- `tui_games/typeracer/analytics.py`: `RaceStats`, ghost helpers reused by Typing Forge.
-- `tui_games/typeracer/menu.py`: `SettingsScreen` pattern/accent colour, add learn settings.
+- `src/app.py`: main menu row "Learn to Code" (replace the "Vim Quest" row).
+- `src/config.py`: `load()/save()` reused by `progress.py`.
+- `src/games/vimquest.py` + `tests/test_vimquest.py`: engine and level tests migrate into `learn/vim/`.
+- `src/typeracer/analytics.py`: `RaceStats`, ghost helpers reused by Typing Forge.
+- `src/typeracer/menu.py`: `SettingsScreen` pattern/accent colour, add learn settings.
 - `pyproject.toml`: package-data for `content/**` files.
 
 ## 11. Verification
@@ -466,7 +466,7 @@ Do these first, in a scratch dir (e.g. the session scratchpad), and write the fi
    queries, seconds) and the 3-star rule.
 3. `config.json` schema for `learn` (versioned: `{"v":1, ...}`) and migration of `vimquest.best` into it.
 4. Content authoring format per game (JSON vs TXT vs Python), a shared loader/validator, and one linter command
-   (`python -m tui_games.learn.lint`) that validates and solves every level, used by tests and by content authors.
+   (`python -m src.learn.lint`) that validates and solves every level, used by tests and by content authors.
 5. Shared UI kit look (borders, colours, key hints footer) so seven games feel like one product; follow the blue accent
    (`theme_variables["primary"]`), the dark palette used in chess, plain text (no emoji/icons: the user asked for text-only
    on the chess screens and may want the same elsewhere; confirm before using icons).

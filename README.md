@@ -3,7 +3,7 @@
 TypeRacer and chess in the terminal (Python + Textual).
 
     pip install -e .
-    spiel                # or: python -m tui_games
+    spiel                # or: python -m src
 
 ## TypeRacer
 Real typeracer.com races as a guest (public races, practice, quote of the day).
@@ -43,7 +43,7 @@ most-missed keys, and your best / recent average per mode (history in `%APPDATA%
 ## Offline
 - **TypeRacer offline** (Settings: connection = offline): random texts from a local cache, per text/language (`%APPDATA%\tui-games\quotes.json`),
   filled by every text you see online; English also has 10 built-in quotes. A language with nothing cached shows an error
-  with a hint. Seed more: `python -c "import asyncio; from tui_games.typeracer.local import fetch_quotes; print(asyncio.run(fetch_quotes(100, universe='lang_de')))"`.
+  with a hint. Seed more: `python -c "import asyncio; from src.typeracer.local import fetch_quotes; print(asyncio.run(fetch_quotes(100, universe='lang_de')))"`.
 - **Chess** is one row; Settings picks offline / Lichess / Chess.com and the offline level.
 - **Chess offline vs computer** (easy/medium/hard): you play White. Uses Stockfish if `STOCKFISH_PATH`
   is set or `stockfish` is on PATH (strongly recommended); otherwise a weak built-in search engine.
@@ -56,7 +56,7 @@ Ported from `butler-web` (expert only: 16x30, 99 mines; first-click-safe, chordi
 Also ported from `butler-web` (`..\butler\butler-web\src\games\sudoku\`): the same 2000-puzzle bank
 (4 variants x 5 difficulties x 100 real curated puzzles, not runtime-generated), the same
 resume/undo/hint/pencil-mark/best-time rules, re-done for a keyboard-only terminal board
-(`tui_games/sudoku/`).
+(`src/sudoku/`).
 - **Variants**: Classic (regular 3x3 boxes), Jigsaw (irregular region shapes - same border-detection
   code path as Classic, just different regions), Cross (adds both main diagonals as extra regions),
   Inequality/Futoshiki-style (`>`/`<` arrows between cells; rows/columns only, no box constraint -
@@ -74,7 +74,7 @@ resume/undo/hint/pencil-mark/best-time rules, re-done for a keyboard-only termin
   and a `Pilot`-driven full solve of a real puzzle through the real screen.
 
 ## 2048
-Original implementation of the classic sliding-tile merge puzzle (`tui_games/games/game2048.py`) -
+Original implementation of the classic sliding-tile merge puzzle (`src/games/game2048.py`) -
 the slide/merge/spawn rules are a generic, widely-reimplemented mechanic; no code or assets taken
 from anywhere. Arrows/hjkl slide all four tiles at once (standard rules: equal adjacent tiles merge
 once per move, no cascading re-merge), `n` starts a new game, `q` leaves. Best score saved.
@@ -82,7 +82,7 @@ Tests: `python -m pytest tests/test_game2048.py` - the compress/merge algorithm 
 cases (including the no-cascade rule), move/no-move detection, game-over detection, reaching 2048.
 
 ## Git Trivia
-A 10-question multiple-choice quiz inside Branch Forest (`tui_games/learn/git/trivia.py`,
+A 10-question multiple-choice quiz inside Branch Forest (`src/learn/git/trivia.py`,
 `TriviaScreen` in `screens.py`) - a lighter, faster companion to the hands-on levels: commands,
 undo semantics, rebase vs merge, reflog, bisect, blame. All questions are original, written for
 this repo. Press `1`-`4` to answer, space/enter for the next question, `escape` to leave. Best
@@ -101,9 +101,9 @@ pieces), move history, you, and the status line. The last move is green; the inp
 
 ## Learn to Code
 
-"Learn to Code" on the main menu opens an overworld hub (`tui_games/learn/`): a rank/XP banner plus a list of
-six regions, one per `tui_games/learn/<game>/` package. Progress (XP, stars, per-level bests) is saved under
-`config.json`'s `"learn"` key via `tui_games/learn/progress.py`. See `docs/learn-research.md` for the schema and
+"Learn to Code" on the main menu opens an overworld hub (`src/learn/`): a rank/XP banner plus a list of
+six regions, one per `src/learn/<game>/` package. Progress (XP, stars, per-level bests) is saved under
+`config.json`'s `"learn"` key via `src/learn/progress.py`. See `docs/learn-research.md` for the schema and
 design decisions, and `PLAN.md` for the full plan - every region is still a **reduced pass** of its PLAN.md
 section (full target level/snippet counts are larger still), but each now has real mechanics and real
 consequences, not a one-shot trivial action per level. Each region's deferred list is below.

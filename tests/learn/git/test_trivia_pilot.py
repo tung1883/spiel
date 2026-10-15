@@ -1,8 +1,8 @@
 import pytest
 
-from tui_games import config
-from tui_games.app import GamesApp
-from tui_games.learn.git.screens import TriviaScreen
+from src import config
+from src.app import GamesApp
+from src.learn.git.screens import TriviaScreen
 
 
 @pytest.mark.asyncio

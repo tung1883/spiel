@@ -1,10 +1,10 @@
 import pytest
 from textual import events
 
-from tui_games import config
-from tui_games.app import GamesApp
-from tui_games.learn.codetype.levels import BOSS_SNIPPETS, SNIPPETS
-from tui_games.learn.codetype.screens import (
+from src import config
+from src.app import GamesApp
+from src.learn.codetype.levels import BOSS_SNIPPETS, SNIPPETS
+from src.learn.codetype.screens import (
     BossRaceScreen,
     CodeRaceScreen,
     CodeTypeRegionMenu,
@@ -13,7 +13,7 @@ from tui_games.learn.codetype.screens import (
     SnippetPickScreen,
     SymbolsDrillScreen,
 )
-from tui_games.typeracer import analytics
+from src.typeracer import analytics
 
 
 def _use_tmp_storage(monkeypatch, tmp_path):

@@ -1,8 +1,8 @@
 import pytest
 
-from tui_games import config
-from tui_games.app import GamesApp
-from tui_games.learn.bughunt.levels import LEVELS
+from src import config
+from src.app import GamesApp
+from src.learn.bughunt.levels import LEVELS
 
 
 @pytest.mark.asyncio

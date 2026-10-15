@@ -1,4 +1,4 @@
-from tui_games.games.game2048 import Board2048, _compress_merge
+from src.games.game2048 import Board2048, _compress_merge
 
 
 def test_compress_merge_basic_cases():

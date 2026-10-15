@@ -1,8 +1,8 @@
 import pytest
 
-from tui_games import config
-from tui_games.app import GamesApp
-from tui_games.sudoku import bank
+from src import config
+from src.app import GamesApp
+from src.sudoku import bank
 
 
 @pytest.mark.asyncio

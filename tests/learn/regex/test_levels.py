@@ -2,8 +2,8 @@ import re
 
 import pytest
 
-from tui_games.learn.regex import engine
-from tui_games.learn.regex.levels import LEVELS
+from src.learn.regex import engine
+from src.learn.regex.levels import LEVELS
 
 GOLF = [lv for lv in LEVELS if lv.mode == "golf"]
 EXTRACT = [lv for lv in LEVELS if lv.mode == "extract"]

@@ -1,4 +1,4 @@
-from tui_games.learn.shell.parser import parse
+from src.learn.shell.parser import parse
 
 
 def test_single_command():

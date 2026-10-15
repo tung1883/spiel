@@ -1,5 +1,5 @@
 """Typing Forge screens: a mode picker, a snippet picker per mode, and the race screens themselves.
-Reuses typeracer's RaceStats/ghost/history machinery (tui_games/typeracer/analytics.py) rather than
+Reuses typeracer's RaceStats/ghost/history machinery (src/typeracer/analytics.py) rather than
 duplicating it - the whole snippet is passed to RaceStats as a single "word" so total_chars matches
 len(code) exactly (newlines included), which keeps the existing WPM/accuracy/ghost math correct
 unmodified.

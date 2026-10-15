@@ -1,4 +1,4 @@
-from tui_games.learn.regex.explain import explain
+from src.learn.regex.explain import explain
 
 
 def test_explains_common_constructs():
