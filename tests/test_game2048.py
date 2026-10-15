@@ -92,3 +92,57 @@ def test_q_does_nothing():
 
 def test_escape_goes_back():
     _back_test("escape")
+
+
+def test_move_records_tile_paths():
+    b = Board2048()
+    b.grid = [[0, 2, 0, 2], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
+    b.move("h")
+    assert sorted(b.last_moves) == [(2, (0, 1), (0, 0)), (2, (0, 3), (0, 0))]  # both slide into the same cell
+    b.grid = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [4, 0, 0, 0]]
+    b.move("k")
+    assert (4, (3, 0), (0, 0)) in b.last_moves
+    b.grid = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 8, 0]]
+    b.move("l")
+    assert (8, (3, 2), (3, 3)) in b.last_moves
+
+
+def test_render_motion_interpolates():
+    from src.games.game2048 import BOARD_H, BOARD_W, render_board, render_motion
+    b = Board2048()
+    b.grid = [[0, 0, 0, 2], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
+    b.move("h")
+    start, mid, end = (render_motion(b, t).plain for t in (0.0, 0.5, 1.0))
+    assert len({start, mid, end}) == 3
+    assert all(len(s.split(chr(10))) == BOARD_H and len(s.split(chr(10))[0]) == BOARD_W for s in (start, mid, end))
+    assert len(render_board(b.grid).plain.split(chr(10))) == BOARD_H
+
+
+def test_screen_animates_then_settles(tmp_path, monkeypatch):
+    import asyncio
+    from textual.app import App
+    from src import config
+    from src.games.game2048 import FRAMES, Game2048Screen
+
+    monkeypatch.setattr(config, "_PATH", tmp_path / "c.json")
+    monkeypatch.setattr("src.games.game2048.FRAME_DT", 30.0)  # timer never fires; frames stepped by hand
+
+    class A(App):
+        def on_mount(self):
+            self.push_screen(Game2048Screen())
+
+    async def run():
+        app = A()
+        async with app.run_test() as pilot:
+            scr = app.screen
+            scr.board.grid = [[0, 0, 0, 2], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
+            await pilot.press("left")
+            assert scr.animating
+            await pilot.press("right")  # interrupts, starts a fresh animation
+            assert scr.animating
+            for _ in range(FRAMES - 1):
+                scr._step_anim()
+                assert scr.animating
+            scr._step_anim()
+            assert not scr.animating
+    asyncio.run(run())
