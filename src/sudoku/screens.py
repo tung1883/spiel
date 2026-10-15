@@ -197,10 +197,10 @@ class SudokuScreen(Screen):
     def on_key(self, event: events.Key) -> None:
         ch, key = event.character, event.key
         event.stop()
-        if key == "q":
-            self.app.pop_screen()
-            return
         if key == "escape":
+            if self.selected is None:
+                self.app.pop_screen()
+                return
             self.selected = None
         elif key in ("up", "k") and self.selected is not None:
             self.selected = max(0, self.selected - 9)
@@ -251,5 +251,5 @@ class SudokuScreen(Screen):
         self.query_one("#board", Static).update(render(g, self.selected, accent), layout=relayout)
         if relayout:
             self.query_one("#help", Static).update(
-                Text("arrows move   1-9 enter digit   n toggle notes   e erase   u undo   ? hint   q back",
+                Text("arrows move   1-9 enter digit   n toggle notes   e erase   u undo   ? hint   esc deselect/back",
                      style="dim"))

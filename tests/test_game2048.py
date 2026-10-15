@@ -55,3 +55,40 @@ def test_reaching_2048_sets_won():
     b.grid = [[1024, 1024, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
     b.move("h")
     assert b.won
+
+
+def _back_test(key, expect_back=True):
+    import asyncio
+    from textual.app import App
+    from textual.screen import Screen
+    from src.games.game2048 import Game2048Screen
+
+    quit_called = []
+
+    class Base(Screen):
+        BINDINGS = [("q", "app.quit", "Quit")]
+
+    class A(App):
+        def on_mount(self):
+            self.push_screen(Base())
+            self.push_screen(Game2048Screen())
+
+        async def action_quit(self):
+            quit_called.append(1)
+
+    async def run():
+        app = A()
+        async with app.run_test() as pilot:
+            await pilot.press(key)
+            await pilot.pause()
+            assert isinstance(app.screen, Base) == expect_back
+    asyncio.run(run())
+    assert not quit_called
+
+
+def test_q_does_nothing():
+    _back_test("q", expect_back=False)
+
+
+def test_escape_goes_back():
+    _back_test("escape")

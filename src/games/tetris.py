@@ -146,7 +146,7 @@ class Tetris:
 
 
 class TetrisScreen(Screen):
-    """arrows/hjkl move+rotate+soft drop, space hard drop, p pause, n new game, q/esc back."""
+    """arrows/hjkl move+rotate+soft drop, space hard drop, p pause, n new game, esc back."""
 
     BINDINGS = [Binding("n", "new_game", "New game"), Binding("p", "pause", "Pause"), Binding("escape", "app.pop_screen", "Back")]
     CSS = """
@@ -208,9 +208,6 @@ class TetrisScreen(Screen):
 
     def on_key(self, event: events.Key) -> None:
         key = event.key
-        if key == "q":
-            self.app.pop_screen()
-            return
         if self.paused or self.game.over:
             return
         g = self.game
@@ -259,5 +256,5 @@ class TetrisScreen(Screen):
         buf.append("+" + "--" * W + "+", style="dim")
         self.query_one("#board", Static).update(buf)
         self.query_one("#help", Static).update(
-            Text("arrows/hjkl move/rotate/drop   space hard drop   p pause   n new   q back", style="dim")
+            Text("arrows/hjkl move/rotate/drop   space hard drop   p pause   n new   esc back", style="dim")
         )

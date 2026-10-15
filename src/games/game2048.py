@@ -105,9 +105,9 @@ _COLOR_BY_VALUE = {
 
 
 class Game2048Screen(Screen):
-    """arrows/hjkl slide, n = new game, q = back."""
+    """arrows/hjkl slide, n = new game, esc = back."""
 
-    BINDINGS = [Binding("n", "new_game", "New game")]
+    BINDINGS = [Binding("n", "new_game", "New game"), Binding("escape", "app.pop_screen", "Back")]
     CSS = """
     Game2048Screen #status {padding: 1 2 0 2; height: auto;}
     Game2048Screen #board {padding: 1 2; height: auto;}
@@ -137,9 +137,6 @@ class Game2048Screen(Screen):
     def on_key(self, event: events.Key) -> None:
         key, ch = event.key, event.character
         over = self.board.is_game_over()
-        if key == "q":
-            self.app.pop_screen()
-            return
         if over:
             return
         moved = False
@@ -183,4 +180,4 @@ class Game2048Screen(Screen):
                 buf.append(text, style=style)
             buf.append("\n")
         self.query_one("#board", Static).update(buf)
-        self.query_one("#help", Static).update(Text("arrows/hjkl slide   n new game   q back", style="dim"))
+        self.query_one("#help", Static).update(Text("arrows/hjkl slide   n new game   esc back", style="dim"))
