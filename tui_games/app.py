@@ -1,0 +1,94 @@
+from textual.app import App, ComposeResult
+from textual.binding import Binding
+from textual.screen import Screen
+from textual.theme import Theme
+from textual.widgets import Footer, Header, OptionList
+from textual.widgets.option_list import Option
+
+SPIEL_DARK = Theme(
+    name="spiel-dark",
+    primary="#7c3aed",
+    secondary="#22d3ee",
+    accent="#a855f7",
+    warning="#f59e0b",
+    error="#ef4444",
+    success="#22c55e",
+    foreground="#d4d4e0",
+    background="#08080c",
+    surface="#0f0f16",
+    panel="#15151f",
+    dark=True,
+)
+
+
+class Menu(Screen):
+    BINDINGS = [Binding("q", "app.quit", "Quit"), Binding("s", "app.settings", "Settings")]
+
+    def compose(self) -> ComposeResult:
+        yield Header(icon="")
+        yield OptionList(
+            Option("TypeRacer", id="typeracer"),
+            Option("Chess", id="chess"),
+            Option("Minesweeper", id="minesweeper"),
+            Option("Sudoku", id="sudoku"),
+            Option("2048", id="2048"),
+            Option("Learn to Code", id="learn"),
+            Option("Settings", id="settings"),
+        )
+        yield Footer()
+
+    def on_option_list_option_selected(self, event: OptionList.OptionSelected) -> None:
+        oid = event.option.id
+        if oid == "typeracer":
+            from .typeracer.menu import load_settings, race_screen
+
+            self.app.push_screen(race_screen(load_settings()))  # uses the saved settings, no setup needed
+        elif oid == "settings":
+            from .typeracer.menu import SettingsScreen
+
+            self.app.push_screen(SettingsScreen())
+        elif oid == "chess":
+            from .typeracer.menu import chess_screen, load_settings
+
+            self.app.push_screen(chess_screen(load_settings()))
+        elif oid == "learn":
+            from .learn.hub import HubScreen
+
+            self.app.push_screen(HubScreen())
+        elif oid == "minesweeper":
+            from .games.minesweeper import MinesweeperScreen
+
+            self.app.push_screen(MinesweeperScreen())
+        elif oid == "sudoku":
+            from .sudoku.screens import SudokuMenu
+
+            self.app.push_screen(SudokuMenu())
+        elif oid == "2048":
+            from .games.game2048 import Game2048Screen
+
+            self.app.push_screen(Game2048Screen())
+
+
+class GamesApp(App):
+    TITLE = "Spiel"
+    ENABLE_COMMAND_PALETTE = False
+    BINDINGS = [Binding("ctrl+s", "settings", "Settings", show=False)]
+
+    def action_settings(self) -> None:
+        from .typeracer.menu import SettingsScreen
+
+        if not isinstance(self.screen, SettingsScreen):
+            self.push_screen(SettingsScreen())
+
+    def on_mount(self) -> None:
+        self.register_theme(SPIEL_DARK)
+        self.theme = "spiel-dark"
+        self.push_screen(Menu())
+
+
+def main() -> None:
+    GamesApp().run()
+
+
+if __name__ == "__main__":
+    main()
