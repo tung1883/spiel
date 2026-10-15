@@ -9,7 +9,7 @@ async def test_playthrough_menu_to_regex_level_and_back(monkeypatch, tmp_path):
     monkeypatch.setattr(config, "_PATH", tmp_path / "config.json")
     app = GamesApp()
     async with app.run_test(size=(100, 40)) as pilot:
-        await pilot.press("down", "down", "down", "down", "down", "down")  # Menu -> Learn to Code
+        await pilot.press(*["down"] * 7)  # Menu -> Learn to Code
         await pilot.press("enter")
         await pilot.pause()
         await pilot.press("enter")  # Hub: Pattern Marsh (first region)

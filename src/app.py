@@ -33,6 +33,7 @@ class Menu(Screen):
             Option("Sudoku", id="sudoku"),
             Option("2048", id="2048"),
             Option("Wordle", id="wordle"),
+            Option("Tetris", id="tetris"),
             Option("Learn to Code", id="learn"),
             Option("Settings", id="settings"),
         )
@@ -72,6 +73,10 @@ class Menu(Screen):
             from .games.wordle import WordleScreen
 
             self.app.push_screen(WordleScreen())
+        elif oid == "tetris":
+            from .games.tetris import TetrisScreen
+
+            self.app.push_screen(TetrisScreen())
 
 
 class GamesApp(App):
