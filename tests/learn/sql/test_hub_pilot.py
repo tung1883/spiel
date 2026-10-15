@@ -11,7 +11,7 @@ async def test_playthrough_menu_to_sql_drill_and_back(monkeypatch, tmp_path):
     monkeypatch.setattr(config, "_PATH", tmp_path / "config.json")
     app = GamesApp()
     async with app.run_test(size=(120, 45)) as pilot:
-        await pilot.press("down", "down", "down", "down", "down")  # Menu -> Learn to Code
+        await pilot.press("down", "down", "down", "down", "down", "down")  # Menu -> Learn to Code
         await pilot.press("enter")
         await pilot.pause()
         await pilot.press("down", "down", "down")  # Hub: regex, git, shell, sql

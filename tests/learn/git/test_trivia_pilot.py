@@ -10,7 +10,7 @@ async def test_playthrough_menu_to_git_trivia_round_and_back(monkeypatch, tmp_pa
     monkeypatch.setattr(config, "_PATH", tmp_path / "config.json")
     app = GamesApp()
     async with app.run_test(size=(100, 40)) as pilot:
-        await pilot.press("down", "down", "down", "down", "down")  # -> Learn to Code
+        await pilot.press("down", "down", "down", "down", "down", "down")  # -> Learn to Code
         await pilot.press("enter")
         await pilot.pause()
         await pilot.press("down")  # Hub: Pattern Marsh, Branch Forest

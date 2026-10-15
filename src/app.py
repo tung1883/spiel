@@ -32,6 +32,7 @@ class Menu(Screen):
             Option("Minesweeper", id="minesweeper"),
             Option("Sudoku", id="sudoku"),
             Option("2048", id="2048"),
+            Option("Wordle", id="wordle"),
             Option("Learn to Code", id="learn"),
             Option("Settings", id="settings"),
         )
@@ -67,6 +68,10 @@ class Menu(Screen):
             from .games.game2048 import Game2048Screen
 
             self.app.push_screen(Game2048Screen())
+        elif oid == "wordle":
+            from .games.wordle import WordleScreen
+
+            self.app.push_screen(WordleScreen())
 
 
 class GamesApp(App):
