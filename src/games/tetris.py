@@ -5,10 +5,10 @@ from rich.text import Text
 from textual import events
 from textual.app import ComposeResult
 from textual.binding import Binding
-from textual.screen import Screen
 from textual.widgets import Footer, Header, Static
 
 from .. import config
+from ..base import AppScreen
 
 W, H = 10, 20
 # Each piece is a set of (row, col) cells in its spawn orientation, inside a bounding box of side `size`.
@@ -145,7 +145,7 @@ class Tetris:
         self.piece = self._spawn()
 
 
-class TetrisScreen(Screen):
+class TetrisScreen(AppScreen):
     """arrows/hjkl move+rotate+soft drop, space hard drop, p pause, n new game, esc back."""
 
     BINDINGS = [Binding("n", "new_game", "New game"), Binding("p", "pause", "Pause"), Binding("escape", "app.pop_screen", "Back")]
@@ -171,6 +171,7 @@ class TetrisScreen(Screen):
         yield Footer()
 
     def on_mount(self) -> None:
+        super().on_mount()
         self._schedule()
         self._draw()
 

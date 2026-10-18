@@ -7,9 +7,9 @@ from rich.text import Text
 from textual import events
 from textual.app import ComposeResult
 from textual.binding import Binding
-from textual.screen import Screen
 from textual.widgets import Footer, Header, Static
 
+from ..base import AppScreen
 from . import bank, progress
 from .render import render
 
@@ -26,7 +26,7 @@ def _fmt_time(seconds: int | None) -> str:
 GRID_COLS = 10
 
 
-class SudokuMenu(Screen):
+class SudokuMenu(AppScreen):
     """Pick a variant and difficulty, then a puzzle from that 100-puzzle bank, laid out as a
     10x10 grid (all 100 visible at once) under variant tabs + a difficulty bar."""
 
@@ -56,6 +56,7 @@ class SudokuMenu(Screen):
         yield Footer()
 
     def on_mount(self) -> None:
+        super().on_mount()
         self._load()
         self._fill(relayout=True)
 
@@ -146,7 +147,7 @@ class SudokuMenu(Screen):
                      "* done   ~ in progress", style="dim"))
 
 
-class SudokuScreen(Screen):
+class SudokuScreen(AppScreen):
     """Arrow keys move the selection; 1-9 enter a digit; n toggles note mode; e erases; u undoes;
     ? reveals the selected cell (hint); q leaves (progress is saved after every edit)."""
 
@@ -175,6 +176,7 @@ class SudokuScreen(Screen):
         yield Footer()
 
     def on_mount(self) -> None:
+        super().on_mount()
         self.set_interval(1.0, self._tick)
         self._draw(relayout=True)
 

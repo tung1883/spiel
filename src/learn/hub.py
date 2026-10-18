@@ -1,14 +1,14 @@
 """Overworld hub: rank/XP banner + list of regions. Entry point from the main menu."""
 from textual.app import ComposeResult
 from textual.binding import Binding
-from textual.screen import Screen
 from textual.widgets import Footer, Header, OptionList, Static
 from textual.widgets.option_list import Option
 
+from ..base import AppScreen
 from . import progress, story
 
 
-class HubScreen(Screen):
+class HubScreen(AppScreen):
     BINDINGS = [Binding("escape,q", "app.pop_screen", "Back")]
     CSS = "HubScreen #status {padding: 1 2; height: auto;}"
 
@@ -19,6 +19,7 @@ class HubScreen(Screen):
         yield Footer()
 
     def on_mount(self) -> None:
+        super().on_mount()
         self._fill()
 
     def on_screen_resume(self) -> None:

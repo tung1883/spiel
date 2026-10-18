@@ -7,10 +7,10 @@ from rich.text import Text
 from textual import events
 from textual.app import ComposeResult
 from textual.binding import Binding
-from textual.screen import Screen
 from textual.widgets import Footer, Header, Static
 
 from .. import config
+from ..base import AppScreen
 
 ROWS, COLS, MINES = 16, 30, 99  # expert only
 NUM_COLORS = {1: "#5c9dff", 2: "#4ec36b", 3: "#ff6b6b", 4: "#b48cff", 5: "#ff9f43", 6: "#3ddbd9", 7: "#e0e0e0", 8: "#9aa0a6"}
@@ -159,7 +159,7 @@ class BoardView(Static):
         return (r, c) if 0 <= r < self.field.rows and 0 <= c < self.field.cols else None
 
 
-class MinesweeperScreen(Screen):
+class MinesweeperScreen(AppScreen):
     BINDINGS = [
         Binding("up,k", "move(-1,0)", "Up", show=False),
         Binding("down,j", "move(1,0)", "Down", show=False),
@@ -185,6 +185,7 @@ class MinesweeperScreen(Screen):
         yield Footer()
 
     def on_mount(self) -> None:
+        super().on_mount()
         self.set_interval(0.25, self._update_info)
         self.action_new()
 

@@ -16,10 +16,10 @@ from rich.text import Text
 from textual import events
 from textual.app import ComposeResult
 from textual.binding import Binding
-from textual.screen import Screen
 from textual.widgets import Footer, Header, OptionList, Static
 from textual.widgets.option_list import Option
 
+from ...base import AppScreen
 from .. import progress
 from .levels import BOSS_SNIPPETS, SNIPPETS, Snippet, distractor_notes
 
@@ -29,7 +29,7 @@ def _now_ms() -> float:
 
 
 # ---- menu ---------------------------------------------------------------------------------
-class CodeTypeRegionMenu(Screen):
+class CodeTypeRegionMenu(AppScreen):
     BINDINGS = [Binding("escape,q", "app.pop_screen", "Back")]
     CSS = "CodeTypeRegionMenu #intro {padding: 1 2;}"
 
@@ -50,7 +50,7 @@ class CodeTypeRegionMenu(Screen):
         self.app.push_screen(SnippetPickScreen(mode))
 
 
-class SnippetPickScreen(Screen):
+class SnippetPickScreen(AppScreen):
     """Pick a snippet for the given mode - Boss only offers tier="expert" material."""
 
     BINDINGS = [Binding("escape,q", "app.pop_screen", "Back")]
@@ -81,7 +81,7 @@ class SnippetPickScreen(Screen):
             self.app.push_screen(BossRaceScreen(snippet))
 
 
-class ExplainQuizScreen(Screen):
+class ExplainQuizScreen(AppScreen):
     """One-line "what does this do?" quiz on the snippet's `note` before typing it."""
 
     BINDINGS = [Binding("escape,q", "app.pop_screen", "Back")]
@@ -102,6 +102,7 @@ class ExplainQuizScreen(Screen):
         yield Footer()
 
     def on_mount(self) -> None:
+        super().on_mount()
         self.query_one("#question", Static).update(
             Text(f"What does this {self.snippet.lang} snippet do?\n", style="bold")
             + Text(self.snippet.code, style="dim")
@@ -122,7 +123,7 @@ class ExplainQuizScreen(Screen):
 
 
 # ---- plain Snippet mode ---------------------------------------------------------------------
-class CodeRaceScreen(Screen):
+class CodeRaceScreen(AppScreen):
     """Character-accurate code typing. Enter types a newline; indentation on the next line is free
     (auto-skipped), like a code-typing mode that doesn't make you re-type leading whitespace.
     escape leaves, ctrl+r restarts, Enter leaves once finished, s offers a Symbols drill on your
@@ -160,6 +161,7 @@ class CodeRaceScreen(Screen):
         yield Footer()
 
     def on_mount(self) -> None:
+        super().on_mount()
         self._draw()
 
     def action_restart(self) -> None:
@@ -358,7 +360,7 @@ class BossRaceScreen(CodeRaceScreen):
 
 
 # ---- Symbols drill: practice whatever characters you just missed -----------------------------
-class SymbolsDrillScreen(Screen):
+class SymbolsDrillScreen(AppScreen):
     """A short follow-up drill built from the characters a finished race's RaceStats.missed
     recorded most often - adaptive-lite, no persistent per-player heatmap, just "what you just
     got wrong, right now"."""
@@ -389,6 +391,7 @@ class SymbolsDrillScreen(Screen):
         yield Footer()
 
     def on_mount(self) -> None:
+        super().on_mount()
         self._draw()
 
     def on_key(self, event: events.Key) -> None:

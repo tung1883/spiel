@@ -6,6 +6,7 @@ from textual.screen import Screen
 from textual.widgets import Footer, Header, Static
 
 from .. import config
+from ..base import AppScreen
 from .screen import RaceScreen
 
 CONNECTION = [("online", "online"), ("offline", "offline")]
@@ -67,7 +68,7 @@ def chess_screen(s: dict) -> Screen:
     return GameScreen(ai_level=level, api_factory=lambda: LocalGame(level))
 
 
-class SettingsScreen(Screen):
+class SettingsScreen(AppScreen):
     """vim-ish settings list: j/k move, h/l (or Enter/Space) change, Esc back. Saved on every change."""
 
     BINDINGS = [
@@ -93,6 +94,7 @@ class SettingsScreen(Screen):
         yield Footer()
 
     def on_mount(self) -> None:
+        super().on_mount()
         self._draw()
 
     def _opts(self, key: str):

@@ -8,10 +8,10 @@ one documented in the footer/hints since it is the reliable fallback.
 from rich.text import Text
 from textual.app import ComposeResult
 from textual.binding import Binding
-from textual.screen import Screen
 from textual.widgets import DataTable, Footer, Header, Input, OptionList, Static, TextArea
 from textual.widgets.option_list import Option
 
+from ...base import AppScreen
 from .. import progress
 from . import db
 from .levels import CASES, DRILLS
@@ -19,7 +19,7 @@ from .levels import CASES, DRILLS
 RUN_BINDINGS = [Binding("f5", "run_query", "Run"), Binding("ctrl+enter", "run_query", "Run")]
 
 
-class SqlRegionMenu(Screen):
+class SqlRegionMenu(AppScreen):
     BINDINGS = [Binding("escape,q", "app.pop_screen", "Back")]
     CSS = "SqlRegionMenu #intro {padding: 1 2;}"
 
@@ -49,7 +49,7 @@ def _fill_table(table: DataTable, cols: list[str], rows: list[tuple]) -> None:
         table.add_row(*(str(v) for v in row))
 
 
-class DrillScreen(Screen):
+class DrillScreen(AppScreen):
     """A single query-matching drill. f5/ctrl+enter run, ctrl+r clear, f2 hint, f3 explain, escape back."""
 
     BINDINGS = [*RUN_BINDINGS, Binding("ctrl+r", "clear", "Clear"), Binding("f2", "toggle_hint", "Hint"),
@@ -82,6 +82,7 @@ class DrillScreen(Screen):
         yield Footer()
 
     def on_mount(self) -> None:
+        super().on_mount()
         self.query_one("#results", DataTable).cursor_type = "row"
         self.query_one("#sql", TextArea).focus()
         self._draw()
@@ -160,7 +161,7 @@ class DrillScreen(Screen):
         self.query_one("#status", Static).update(st)
 
 
-class CaseScreen(Screen):
+class CaseScreen(AppScreen):
     """One case's console: a free query box plus an answer box to submit each step's clue.
     World-aware - every query here runs against that case's own seeded dataset (CASES[i].world)."""
 
@@ -198,6 +199,7 @@ class CaseScreen(Screen):
         yield Footer()
 
     def on_mount(self) -> None:
+        super().on_mount()
         self.query_one("#results", DataTable).cursor_type = "row"
         self.query_one("#sql", TextArea).focus()
         self._draw()

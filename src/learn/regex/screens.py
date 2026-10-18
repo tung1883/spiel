@@ -4,17 +4,17 @@ extract (matches must equal an exact target list), and substitute (pattern+repla
 from rich.text import Text
 from textual.app import ComposeResult
 from textual.binding import Binding
-from textual.screen import Screen
 from textual.widgets import Footer, Header, Input, OptionList, Static
 from textual.widgets.option_list import Option
 
+from ...base import AppScreen
 from .. import progress
 from . import engine
 from .explain import explain
 from .levels import LEVELS
 
 
-class RegexRegionMenu(Screen):
+class RegexRegionMenu(AppScreen):
     BINDINGS = [Binding("escape,q", "app.pop_screen", "Back")]
     CSS = "RegexRegionMenu #intro {padding: 1 2;}"
 
@@ -28,6 +28,7 @@ class RegexRegionMenu(Screen):
         yield Footer()
 
     def on_mount(self) -> None:
+        super().on_mount()
         self._fill()
 
     def on_screen_resume(self) -> None:
@@ -48,7 +49,7 @@ class RegexRegionMenu(Screen):
         self.app.push_screen(RegexLevelScreen(int(event.option.id)))
 
 
-class RegexLevelScreen(Screen):
+class RegexLevelScreen(AppScreen):
     """Golf: one pattern Input, checked live (debounced) against yes/no. Extract: one pattern
     Input, checked against a text's exact match list. Substitute: pattern + replacement Inputs,
     checked by applying both to `before` and comparing to `after`. Enter forces an immediate
@@ -84,6 +85,7 @@ class RegexLevelScreen(Screen):
         yield Footer()
 
     def on_mount(self) -> None:
+        super().on_mount()
         self._draw("")
         self.query_one("#pattern", Input).focus()
 

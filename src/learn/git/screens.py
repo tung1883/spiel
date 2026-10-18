@@ -4,7 +4,6 @@ from rich.text import Text
 from textual import events
 from textual.app import ComposeResult
 from textual.binding import Binding
-from textual.screen import Screen
 from textual.widgets import Footer, Header, Input, OptionList, Static
 from textual.widgets.option_list import Option
 
@@ -12,9 +11,10 @@ from .. import progress
 from . import graph, trivia
 from .levels import LEVELS, LevelRun
 from ... import config
+from ...base import AppScreen
 
 
-class GitRegionMenu(Screen):
+class GitRegionMenu(AppScreen):
     BINDINGS = [Binding("escape,q", "app.pop_screen", "Back")]
     CSS = "GitRegionMenu #intro {padding: 1 2;}"
 
@@ -33,7 +33,7 @@ class GitRegionMenu(Screen):
             self.app.push_screen(GitLevelScreen(int(event.option.id)))
 
 
-class GitLevelScreen(Screen):
+class GitLevelScreen(AppScreen):
     """Type a git-like command and press Enter. escape = region map, ctrl+r = restart, ctrl+z = undo."""
 
     BINDINGS = [
@@ -67,6 +67,7 @@ class GitLevelScreen(Screen):
         yield Footer()
 
     def on_mount(self) -> None:
+        super().on_mount()
         self._draw()
         self.query_one("#cmd", Input).focus()
 
@@ -125,7 +126,7 @@ class GitLevelScreen(Screen):
         self.query_one("#status", Static).update(st)
 
 
-class TriviaScreen(Screen):
+class TriviaScreen(AppScreen):
     """1-4 picks an option. escape leaves (no credit for the round)."""
 
     BINDINGS = [Binding("escape", "app.pop_screen", "Back")]
@@ -151,6 +152,7 @@ class TriviaScreen(Screen):
         yield Footer()
 
     def on_mount(self) -> None:
+        super().on_mount()
         self._draw()
 
     def on_key(self, event: events.Key) -> None:

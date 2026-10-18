@@ -5,9 +5,9 @@ from rich.text import Text
 from textual import events
 from textual.app import ComposeResult
 from textual.binding import Binding
-from textual.screen import Screen
 from textual.widgets import Footer, Header, Static
 
+from ..base import AppScreen
 from .client import RaceState, TypeRacerClient, TypeRacerError
 from .analytics import RaceStats, ghost_chars, load_ghost, save_ghost, save_result
 from .keylog import Keylog
@@ -21,7 +21,7 @@ def _now_ms() -> float:
     return time.time() * 1000
 
 
-class RaceScreen(Screen):
+class RaceScreen(AppScreen):
     BINDINGS = [
         Binding("escape", "leave", "Leave"),
         Binding("enter", "again", "New race (when done)"),
@@ -72,6 +72,7 @@ class RaceScreen(Screen):
         yield Footer()
 
     async def on_mount(self) -> None:
+        super().on_mount()
         self.client = self._make_client()
         self.set_interval(0.1, self._redraw)
         await self._join()

@@ -10,10 +10,10 @@ from rich.text import Text
 from textual import events
 from textual.app import ComposeResult
 from textual.binding import Binding
-from textual.screen import Screen
 from textual.widgets import Footer, Header, OptionList, Static
 from textual.widgets.option_list import Option
 
+from ...base import AppScreen
 from .. import progress
 from . import sandbox, tracer
 from .levels import LEVELS, BugLevel, apply_fix, build_script
@@ -37,7 +37,7 @@ def diagnose_options(level: BugLevel) -> list[str]:
     return sorted(picked + [level.bug_class])
 
 
-class BugHuntRegionMenu(Screen):
+class BugHuntRegionMenu(AppScreen):
     BINDINGS = [Binding("escape,q", "app.pop_screen", "Back")]
     CSS = "BugHuntRegionMenu #intro {padding: 1 2;}"
 
@@ -55,7 +55,7 @@ class BugHuntRegionMenu(Screen):
         self.app.push_screen(BugHuntLevelScreen(int(event.option.id)))
 
 
-class BugHuntLevelScreen(Screen):
+class BugHuntLevelScreen(AppScreen):
     """j/k move the cursor, Enter accuses a line (Hunt), then edit + Enter runs the fix (Fix it),
     then j/k + Enter picks the bug class (Diagnose). 't' during Hunt opens the step tracer.
     q = level list, ctrl+r = restart, ? = reveal the buggy line."""
@@ -99,6 +99,7 @@ class BugHuntLevelScreen(Screen):
         yield Footer()
 
     def on_mount(self) -> None:
+        super().on_mount()
         self._draw()
 
     def action_restart(self) -> None:

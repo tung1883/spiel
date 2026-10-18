@@ -6,10 +6,10 @@ from rich.text import Text
 from textual import events
 from textual.app import ComposeResult
 from textual.binding import Binding
-from textual.screen import Screen
 from textual.widgets import Footer, Header, Static
 
 from .. import config
+from ..base import AppScreen
 
 SIZE = 4
 
@@ -196,7 +196,7 @@ def render_motion(board: Board2048, t: float) -> Text:
     return _canvas(tiles)
 
 
-class Game2048Screen(Screen):
+class Game2048Screen(AppScreen):
     """arrows/hjkl slide, n = new game, esc = back."""
 
     BINDINGS = [Binding("n", "new_game", "New game"), Binding("escape", "app.pop_screen", "Back")]
@@ -222,6 +222,7 @@ class Game2048Screen(Screen):
         yield Footer()
 
     def on_mount(self) -> None:
+        super().on_mount()
         self._draw()
 
     @property

@@ -1,9 +1,12 @@
 from textual.app import App, ComposeResult
 from textual.binding import Binding
-from textual.screen import Screen
 from textual.theme import Theme
 from textual.widgets import Footer, Header, OptionList
 from textual.widgets.option_list import Option
+
+from .base import AppScreen
+from .music.controller import MusicController
+from .terminal_title import set_terminal_title
 
 SPIEL_DARK = Theme(
     name="spiel-dark",
@@ -21,7 +24,7 @@ SPIEL_DARK = Theme(
 )
 
 
-class Menu(Screen):
+class Menu(AppScreen):
     BINDINGS = [
         Binding("q", "app.quit", "Quit"),
         Binding("s", "app.settings", "Settings"),
@@ -46,6 +49,7 @@ class Menu(Screen):
             Option("Wordle", id="wordle"),
             Option("Tetris", id="tetris"),
             Option("Learn to Code", id="learn"),
+            Option("Music", id="music"),
             Option("Settings", id="settings"),
         )
         yield Footer()
@@ -88,12 +92,19 @@ class Menu(Screen):
             from .games.tetris import TetrisScreen
 
             self.app.push_screen(TetrisScreen())
+        elif oid == "music":
+            from .music.screens import music_screen
+
+            self.app.push_screen(music_screen(self.app))
 
 
 class GamesApp(App):
     TITLE = "Spiel"
     ENABLE_COMMAND_PALETTE = False
-    BINDINGS = [Binding("ctrl+s", "settings", "Settings", show=False)]
+    BINDINGS = [
+        Binding("ctrl+s", "settings", "Settings", show=False),
+        Binding("ctrl+p", "toggle_music", "Music", show=False),
+    ]
 
     def action_settings(self) -> None:
         from .typeracer.menu import SettingsScreen
@@ -101,9 +112,33 @@ class GamesApp(App):
         if not isinstance(self.screen, SettingsScreen):
             self.push_screen(SettingsScreen())
 
+    def action_toggle_music(self) -> None:
+        from .music.screens import FolderPromptScreen, MusicScreen, music_screen
+
+        if isinstance(self.screen, (MusicScreen, FolderPromptScreen)):
+            self.pop_screen()
+        else:
+            self.push_screen(music_screen(self))
+
+    def _check_music_finished(self) -> None:
+        if self.music.finished():
+            self.music.next()
+
+    def _update_title(self) -> None:
+        track = self.music.current_track
+        if track is None:
+            set_terminal_title("Spiel")
+        else:
+            suffix = " (paused)" if self.music.paused else ""
+            set_terminal_title(f"{track.stem}{suffix} - Spiel")
+
     def on_mount(self) -> None:
         self.register_theme(SPIEL_DARK)
         self.theme = "spiel-dark"
+        self.music = MusicController()
+        self.music.on_change = self._update_title
+        set_terminal_title("Spiel")
+        self.set_interval(0.5, self._check_music_finished)
         self.push_screen(Menu())
 
 

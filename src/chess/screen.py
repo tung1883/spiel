@@ -8,11 +8,11 @@ import httpx
 from textual.app import ComposeResult
 from textual.binding import Binding
 from textual.containers import Horizontal, Vertical
-from textual.screen import Screen
 from textual.widgets import Footer, Header, Input, OptionList, Static
 from textual.widgets.option_list import Option
 
 from .. import config
+from ..base import AppScreen
 from .board import BoardWidget
 from .lichess import Lichess, LichessError
 
@@ -26,7 +26,7 @@ def _fmt_clock(ms: float) -> str:
     return f"{s // 60}:{s % 60:02d}"
 
 
-class LichessMenu(Screen):
+class LichessMenu(AppScreen):
     BINDINGS = [Binding("escape", "app.pop_screen", "Back")]
 
     def compose(self) -> ComposeResult:
@@ -62,7 +62,7 @@ class LichessMenu(Screen):
                 self.app.push_screen(GameScreen(ai_level=level))
 
 
-class GameScreen(Screen):
+class GameScreen(AppScreen):
     """Text-only game: type moves (e4, Nf3, e2e4) or a command (resign, draw, abort, back) and press Enter."""
 
     BINDINGS = [Binding("escape", "back", "Back")]
@@ -109,6 +109,7 @@ class GameScreen(Screen):
         yield Footer()
 
     async def on_mount(self) -> None:
+        super().on_mount()
         self.api = self.api_factory() if self.api_factory else Lichess(config.lichess_token())
         self.set_interval(0.2, self._tick)
         self.tasks.append(asyncio.create_task(self._run()))
@@ -316,7 +317,7 @@ class GameScreen(Screen):
         self.app.pop_screen()
 
 
-class ChessComScreen(Screen):
+class ChessComScreen(AppScreen):
     """Read-only Chess.com view: no official/public API exists for making moves."""
 
     BINDINGS = [Binding("escape", "back", "Back")]
@@ -370,7 +371,7 @@ class ChessComScreen(Screen):
         self.app.pop_screen()
 
 
-class ChessComLogin(Screen):
+class ChessComLogin(AppScreen):
     """One-time login: paste the CHESSCOM_REMEMBERME cookie (chess.com's password login is behind a bot check)."""
 
     BINDINGS = [Binding("escape", "app.pop_screen", "Back")]
@@ -412,7 +413,7 @@ class ChessComLogin(Screen):
             self.then(sess)
 
 
-class ChessComMenu(Screen):
+class ChessComMenu(AppScreen):
     """Chess.com live games: plain HTTP + WebSocket, no browser (chesscom_direct.py)."""
 
     BINDINGS = [Binding("escape", "app.pop_screen", "Back"), Binding("l", "logout", "Log out")]

@@ -4,15 +4,15 @@ from rich.text import Text
 from textual.app import ComposeResult
 from textual.binding import Binding
 from textual.containers import Horizontal, Vertical
-from textual.screen import Screen
 from textual.widgets import Footer, Header, Input, OptionList, RichLog, Static
 from textual.widgets.option_list import Option
 
+from ...base import AppScreen
 from .. import progress
 from .levels import MISSIONS, MissionRun
 
 
-class ShellRegionMenu(Screen):
+class ShellRegionMenu(AppScreen):
     BINDINGS = [Binding("escape,q", "app.pop_screen", "Back")]
     CSS = "ShellRegionMenu #intro {padding: 1 2;}"
 
@@ -29,7 +29,7 @@ class ShellRegionMenu(Screen):
         self.app.push_screen(MissionScreen(int(event.option.id)))
 
 
-class MissionScreen(Screen):
+class MissionScreen(AppScreen):
     """Type shell commands at the prompt. escape = mission list, ctrl+r = restart, ctrl+g = hint."""
 
     BINDINGS = [
@@ -61,6 +61,7 @@ class MissionScreen(Screen):
         yield Footer()
 
     def on_mount(self) -> None:
+        super().on_mount()
         log = self.query_one("#scrollback", RichLog)
         log.write(self.mission.story)
         log.write("")

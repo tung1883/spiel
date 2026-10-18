@@ -5,10 +5,10 @@ from rich.text import Text
 from textual import events
 from textual.app import ComposeResult
 from textual.binding import Binding
-from textual.screen import Screen
 from textual.widgets import Footer, Header, Static
 
 from .. import config
+from ..base import AppScreen
 from .wordle_words import WORDS
 
 LENGTH = 5
@@ -90,7 +90,7 @@ def record_result(won: bool) -> None:
     config.save(cfg)
 
 
-class WordleScreen(Screen):
+class WordleScreen(AppScreen):
     """type letters, enter submits, backspace deletes, ctrl+n = new word, escape = back."""
 
     BINDINGS = [Binding("escape", "app.pop_screen", "Back"), Binding("ctrl+n", "new_game", "New word")]
@@ -115,6 +115,7 @@ class WordleScreen(Screen):
         yield Footer()
 
     def on_mount(self) -> None:
+        super().on_mount()
         self._draw()
 
     def action_new_game(self) -> None:
