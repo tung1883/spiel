@@ -119,7 +119,7 @@ class MusicScreen(Screen):
     CSS = """
     MusicScreen #now-playing {height: auto; padding: 1 2;}
     MusicScreen #nav {height: 8; border: round $primary;}
-    MusicScreen #tracks {height: 1fr;}
+    MusicScreen #tracks {height: 1fr; border: round $primary;}
     MusicScreen #help {dock: bottom; height: 2; padding: 0 2; color: $text-muted;}
     """
 
@@ -276,8 +276,21 @@ class MusicScreen(Screen):
         for i, t in enumerate(playlists.tracks_of(name)):
             option_list.add_option(Option(t.stem, id=f"pfile:{i}"))
 
+    def _selection_summary(self) -> str | None:
+        if not self.selected:
+            return None
+        files = sum(1 for i in self.selected if i.startswith("file:"))
+        dirs = sum(1 for i in self.selected if i.startswith("dir:"))
+        parts = []
+        if files:
+            parts.append(f"{files} file{'s' if files != 1 else ''}")
+        if dirs:
+            parts.append(f"{dirs} folder{'s' if dirs != 1 else ''}")
+        return f"{len(self.selected)} selected ({', '.join(parts)})"
+
     def _refresh(self) -> None:
         self.query_one("#now-playing", Static).update(_now_playing_text(self.app.music))
+        self.query_one("#tracks", OptionList).border_subtitle = self._selection_summary() or ""
         self._build_nav()
 
     # ---- navigation -------------------------------------------------------------
@@ -385,6 +398,7 @@ class MusicScreen(Screen):
         tracks = self.query_one("#tracks", OptionList)
         if keep is not None and keep < tracks.option_count:
             tracks.highlighted = keep
+        self._refresh()
 
     def _resolve_paths(self, option_id: str) -> list[Path]:
         if option_id.startswith("file:"):
