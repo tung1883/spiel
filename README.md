@@ -23,7 +23,7 @@ The **TypeRacer** row starts a race at once with your saved settings (defaults: 
   CJK/Thai/RTL omitted - they need IME/shaping). Small universes may leave you waiting for opponents; use practice.
 Offline practice has no countdown: the timer starts at your first key. After every race (and when you die) you get
 analytics: net/raw WPM, accuracy, consistency, errors, backspaces, a speed-over-time sparkline, fastest/slowest words,
-most-missed keys, and your best / recent average per mode (history in `%APPDATA%\tui-games\typeracer-history.json`).
+most-missed keys, and your best / recent average per mode (history in `%APPDATA%\spiel\typeracer-history.json`).
 
 ## Chess
 - **Lichess**: full play via the official Board API. Needs a token with `board:play`
@@ -34,14 +34,14 @@ most-missed keys, and your best / recent average per mode (history in `%APPDATA%
   chess.com's RSocket/WebSocket game protocol (reverse-engineered, see `docs/chesscom-protocol.md`). Password login
   is behind a Cloudflare Turnstile bot check, so the first time you paste one cookie (`CHESSCOM_REMEMBERME`, from your
   own browser's dev tools) into the TUI; it mints fresh session cookies over HTTP and renews them itself. Saved in
-  `%APPDATA%\tui-games\chesscom-session.json` (`l` in the Chess.com menu logs out).
+  `%APPDATA%\spiel\chesscom-session.json` (`l` in the Chess.com menu logs out).
   Games are **unrated** unless `TUI_GAMES_CHESSCOM_RATED=1`. Same text commands as Lichess; resign, abort and draw offers work,
   promotion codec checked offline only. Chess.com bots run client-side in the website (no network protocol), so
   there is no "play a bot" here - use the offline computer. Unofficial: can break when chess.com changes, and may be against its terms.
   Also has a read-only viewer for any user's daily games (public API).
 
 ## Offline
-- **TypeRacer offline** (Settings: connection = offline): random texts from a local cache, per text/language (`%APPDATA%\tui-games\quotes.json`),
+- **TypeRacer offline** (Settings: connection = offline): random texts from a local cache, per text/language (`%APPDATA%\spiel\quotes.json`),
   filled by every text you see online; English also has 10 built-in quotes. A language with nothing cached shows an error
   with a hint. Seed more: `python -c "import asyncio; from src.typeracer.local import fetch_quotes; print(asyncio.run(fetch_quotes(100, universe='lang_de')))"`.
 - **Chess** is one row; Settings picks offline / Lichess / Chess.com and the offline level.

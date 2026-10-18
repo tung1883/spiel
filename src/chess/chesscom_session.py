@@ -12,7 +12,7 @@ from pathlib import Path
 
 import httpx
 
-SESSION_FILE = Path(os.environ.get("APPDATA") or Path.home() / ".config") / "tui-games" / "chesscom-session.json"
+SESSION_FILE = Path(os.environ.get("APPDATA") or Path.home() / ".config") / "spiel" / "chesscom-session.json"
 DEFAULT_UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36"
 AUTH_COOKIES = ("PHPSESSID", "ACCESS_TOKEN", "CHESSCOM_REMEMBERME")
 

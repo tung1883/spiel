@@ -2,7 +2,7 @@ import json
 import os
 from pathlib import Path
 
-_PATH = Path(os.environ.get("APPDATA") or Path.home() / ".config") / "tui-games" / "config.json"
+_PATH = Path(os.environ.get("APPDATA") or Path.home() / ".config") / "spiel" / "config.json"
 
 
 def load() -> dict:

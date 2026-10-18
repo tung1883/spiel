@@ -7,7 +7,7 @@ import time
 from collections import Counter
 from pathlib import Path
 
-HISTORY = Path(os.environ.get("APPDATA") or Path.home() / ".config") / "tui-games" / "typeracer-history.json"
+HISTORY = Path(os.environ.get("APPDATA") or Path.home() / ".config") / "spiel" / "typeracer-history.json"
 GHOSTS = HISTORY.with_name("typeracer-ghosts.json")
 SPARK = "▁▂▃▄▅▆▇"  # partial blocks, 1/8..7/8
 

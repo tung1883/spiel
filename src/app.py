@@ -22,7 +22,18 @@ SPIEL_DARK = Theme(
 
 
 class Menu(Screen):
-    BINDINGS = [Binding("q", "app.quit", "Quit"), Binding("s", "app.settings", "Settings")]
+    BINDINGS = [
+        Binding("q", "app.quit", "Quit"),
+        Binding("s", "app.settings", "Settings"),
+        Binding("j", "cursor_down", "Down", show=False),
+        Binding("k", "cursor_up", "Up", show=False),
+    ]
+
+    def action_cursor_down(self) -> None:
+        self.query_one(OptionList).action_cursor_down()
+
+    def action_cursor_up(self) -> None:
+        self.query_one(OptionList).action_cursor_up()
 
     def compose(self) -> ComposeResult:
         yield Header(icon="")

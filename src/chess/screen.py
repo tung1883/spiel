@@ -340,7 +340,7 @@ class ChessComScreen(Screen):
         if not user:
             return
         try:
-            async with httpx.AsyncClient(headers={"User-Agent": "tui-games"}, timeout=15) as c:
+            async with httpx.AsyncClient(headers={"User-Agent": "spiel"}, timeout=15) as c:
                 r = await c.get(f"{self.API}/player/{user}/games")
                 r.raise_for_status()
                 self.games = r.json().get("games", [])

@@ -49,7 +49,7 @@ class TypeRacerClient:
     def __init__(self, universe: str = "play"):
         self.universe = universe
         self.http = httpx.AsyncClient(
-            headers={"User-Agent": "Mozilla/5.0 tui-games", "Origin": BASE, "Referer": BASE + "/"},
+            headers={"User-Agent": "Mozilla/5.0 spiel", "Origin": BASE, "Referer": BASE + "/"},
             follow_redirects=True,
             timeout=15,
         )

@@ -1,4 +1,4 @@
-# Learn to Code: 7 story-driven coding games inside tui-games
+# Learn to Code: 7 story-driven coding games inside spiel
 
 > Handoff document for a fresh session. Read sections 0 (state and conventions) and 12 (research to do first) before
 > writing any code. Sections 1-11 are the approved plan. The user approved it as written; do not re-ask the questions
@@ -6,8 +6,8 @@
 
 ## 0. Current state and working conventions
 
-**Repo:** `C:\Users\Tung\Documents\work\tui-games` (not a git repo, Windows, Python 3.12, Textual 8.2.8, editable install
-`pip install -e .`, entry point `tui-games`). Related repos nearby: `..\plainphone`, `..\butler` (not needed here).
+**Repo:** `C:\Users\Tung\Documents\work\spiel` (not a git repo, Windows, Python 3.12, Textual 8.2.8, editable install
+`pip install -e .`, entry point `spiel`). Related repos nearby: `..\plainphone`, `..\butler` (not needed here).
 
 **Already built (do not redo):**
 - Main menu `src/app.py`: rows TypeRacer, Chess, Minesweeper, **Vim Quest (learn vim)**, Settings. `s` / `ctrl+s` open
@@ -20,12 +20,12 @@
   motions h j k l w b e 0 ^ $ gg G f F t T ; ,, operators d/c, x D C r, i a A I o O, p P, u), 16 text-buffer levels
   with reference solutions, menu + level screens. It is the seed for Game 1 (section 2); its engine moves to
   `src/learn/vim/engine.py` and the 16 levels become "Training Rooms".
-- Persistence: `src/config.py` (`load()/save()` of `%APPDATA%\tui-games\config.json`; keys in use: `typeracer`,
+- Persistence: `src/config.py` (`load()/save()` of `%APPDATA%\spiel\config.json`; keys in use: `typeracer`,
   `lichess_token`, `best_minesweeper_expert`, `vimquest.best`). The new `learn` key must not disturb those.
 
 **Conventions to follow (from the user's CLAUDE.md and what bit us):**
 - Replies concise. Never add Co-Authored-By/AI attribution to commits; short commit messages; **never `git push`** unless told.
-  (There is no git repo in `tui-games` today; do not `git init` without asking.)
+  (There is no git repo in `spiel` today; do not `git init` without asking.)
 - Write code files with the Write/Edit tools, not shell heredocs: backslash escapes (`\n`, `\s`, `\t`) were mangled by the Bash
   tool repeatedly (broken strings in Python source, a tab character in a README path).
 - Textual: do not name instance attributes `_size`, `size`, `render`, `_cell`-like names that shadow `Widget` internals
@@ -40,7 +40,7 @@
 ---
 
 ## Context
-tui-games (Python 3.12 + Textual 8, `C:\Users\Tung\Documents\work\tui-games`) has TypeRacer, chess, Minesweeper and a first
+spiel (Python 3.12 + Textual 8, `C:\Users\Tung\Documents\work\spiel`) has TypeRacer, chess, Minesweeper and a first
 "Vim Quest" (16 text-buffer puzzles, `src/games/vimquest.py`). The user wants a full suite of games that teach coding,
 each as deep and polished as https://vim-adventures.com/ (a world you explore, abilities you earn, boss rooms, a feel of
 progress), not a pile of quiz levels. Decisions already made with the user:

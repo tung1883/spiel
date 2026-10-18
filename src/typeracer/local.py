@@ -5,7 +5,7 @@ import random
 import time
 from pathlib import Path
 
-CACHE = Path(os.environ.get("APPDATA") or Path.home() / ".config") / "tui-games" / "quotes.json"
+CACHE = Path(os.environ.get("APPDATA") or Path.home() / ".config") / "spiel" / "quotes.json"
 
 QUOTES = [
     "It is a truth universally acknowledged, that a single man in possession of a good fortune, must be in want of a wife.",

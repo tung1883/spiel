@@ -15,7 +15,7 @@ class Lichess:
     def __init__(self, token: str):
         self.http = httpx.AsyncClient(
             base_url=BASE,
-            headers={"Authorization": f"Bearer {token}", "User-Agent": "tui-games"},
+            headers={"Authorization": f"Bearer {token}", "User-Agent": "spiel"},
             timeout=httpx.Timeout(15, read=None),
         )
 
