@@ -213,6 +213,7 @@ class RaceScreen(AppScreen):
                 self.stats.word_done(self.wi, now)
                 self.stats.finish(now)
                 self.wi = len(self.words)
+                self.stats.progress(now, self.stats.total_chars)  # final point, so saved ghost reaches 100%
                 self.report = self.stats.report(self.mode_key())  # before save_result: history excludes this race
                 self.report += self._ghost_verdict()
                 save_result(self.mode_key(), self.stats)
@@ -343,6 +344,9 @@ class RaceScreen(AppScreen):
         if not self.ghost or not self.stats:
             return 0.0
         ms = now - self.started_at if self.started_at else 0
+        curve = self.ghost["curve"]
+        if curve and ms >= curve[-1][0]:  # ghost already crossed the line (older saves lack the final point)
+            return 1.0
         return min(1.0, ghost_chars(self.ghost, ms) / max(1, self.stats.total_chars))
 
     def _render_players(self, st: RaceState, total: int, now: float) -> Text:
@@ -364,7 +368,7 @@ class RaceScreen(AppScreen):
             rows.append((label, min(words, total) / total, "green" if done else "white",
                          f"{res['wpm']:.0f} wpm" if done else f"{min(words, total)}/{total}"))
         if self.ghost:
-            rows.append((f"ghost {self.ghost['wpm']:.0f}wpm", self._ghost_frac(now), "magenta", ""))
+            rows.append(("ghost", self._ghost_frac(now), "magenta", f"{self.ghost['wpm']:.0f} wpm"))
         if not others and self.mode not in ("offline", "practice", "qotd"):
             t.append("waiting for other racers...\n", style="dim")
         for label, frac, style, tail in rows:
