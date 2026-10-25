@@ -25,3 +25,13 @@ def set_lichess_token(token: str) -> None:
     cfg = load()
     cfg["lichess_token"] = token
     save(cfg)
+
+
+def engine_path_override() -> str:
+    return load().get("chess_engine_path", "")
+
+
+def set_engine_path_override(path: str) -> None:
+    cfg = load()
+    cfg["chess_engine_path"] = path
+    save(cfg)

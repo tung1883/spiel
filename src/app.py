@@ -65,9 +65,9 @@ class Menu(AppScreen):
 
             self.app.push_screen(SettingsScreen())
         elif oid == "chess":
-            from .typeracer.menu import chess_screen, load_settings
+            from .chess.menu import ChessMenu
 
-            self.app.push_screen(chess_screen(load_settings()))
+            self.app.push_screen(ChessMenu())
         elif oid == "learn":
             from .learn.hub import HubScreen
 

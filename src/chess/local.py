@@ -1,28 +1,21 @@
 """Offline opponent exposing the same interface GameScreen uses for Lichess.
 
-Uses a UCI engine (STOCKFISH_PATH env var or `stockfish` on PATH) when available,
-otherwise a small built-in alpha-beta search.
+Uses a UCI engine when available (see engine_manager.find_engine: a config-set override path,
+STOCKFISH_PATH env var or `stockfish` on PATH, or a binary spiel downloaded itself), otherwise a
+small built-in alpha-beta search.
 """
 import asyncio
-import os
 import random
-import shutil
 from collections.abc import AsyncIterator
 
 import chess
 import chess.engine
 
+from .engine_manager import find_engine
 from .lichess import LichessError
 
 VALUES = {chess.PAWN: 100, chess.KNIGHT: 320, chess.BISHOP: 330, chess.ROOK: 500, chess.QUEEN: 900, chess.KING: 0}
 INF = 10**9
-
-
-def find_engine() -> str | None:
-    path = os.environ.get("STOCKFISH_PATH")
-    if path and os.path.exists(path):
-        return path
-    return shutil.which("stockfish")
 
 
 def _evaluate(board: chess.Board) -> int:
