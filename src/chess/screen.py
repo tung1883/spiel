@@ -13,6 +13,7 @@ from textual.widgets.option_list import Option
 
 from .. import config
 from ..base import AppScreen
+from . import opening_book
 from .board import BoardWidget
 from .lichess import Lichess, LichessError
 
@@ -176,6 +177,7 @@ class GameScreen(AppScreen):
                 self.names[chess.WHITE] = self._player_name(white)
                 self.names[chess.BLACK] = self._player_name(black)
                 self.query_one(BoardWidget).flipped = self.my_color == chess.BLACK
+                self.query_one(BoardWidget).side = self.my_color
                 fen = ev.get("initialFen")
                 self.initial_fen = None if fen in (None, "startpos") else fen
                 self.message = ""
@@ -259,6 +261,8 @@ class GameScreen(AppScreen):
         rows = [f"{i // 2 + 1:>3}. {moves[i]:<8}{moves[i + 1] if i + 1 < len(moves) else ''}" for i in range(0, len(moves), 2)]
         visible = max(1, hist.size.height - 2)
         hist.update("\n".join(rows[-visible:]))
+        opening = opening_book.classify(self.board.move_stack)
+        hist.border_subtitle = f"{opening[0]} {opening[1]}" if opening else ""
 
     async def _send_move(self, move: chess.Move) -> None:
         try:
@@ -292,6 +296,10 @@ class GameScreen(AppScreen):
             self.message = f"Illegal/unknown move: {text}"
             return
         await self._send_move(move)
+
+    async def on_board_widget_move_requested(self, event: BoardWidget.MoveRequested) -> None:
+        if self.live and self.board.turn == self.my_color:
+            await self._send_move(event.move)
 
     async def _guard(self, coro) -> None:
         if not self.game_id or not self.live:
@@ -332,7 +340,7 @@ class ChessComScreen(AppScreen):
         yield Static("Chess.com has no public API for playing moves. Enter a username to view their current daily games.", id="msg")
         yield Input(placeholder="chess.com username", id="user")
         yield OptionList(id="games")
-        yield BoardWidget(id="board")
+        yield BoardWidget(id="board", clickable=False)
         yield Footer()
 
     async def on_input_submitted(self, event: Input.Submitted) -> None:
